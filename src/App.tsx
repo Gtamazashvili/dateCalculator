@@ -3,6 +3,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 
 const App: React.FC = () => {
   const dateOfTheMoment = new Date(Date.now());
+
   const [result, setResult] = useState<{
     years: number;
     months: number;
@@ -24,6 +25,8 @@ const App: React.FC = () => {
   function parseDaysToYMD(differenceInDays: number) {
     const daysInYear = 365;
     const daysInMonth = 30.34;
+
+    // 30.34 is an approximation for the average number of days in a month
 
     const years = Math.floor(differenceInDays / daysInYear);
     differenceInDays -= years * daysInYear;
@@ -77,42 +80,42 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyles />
-      <MainDiv>
-        <Form onSubmit={handleSubmit}>
-          <InputAndTextDiv>
-            <Desc>Day</Desc>
-            <DateInput
-              $error={errors.day}
-              name="day"
-              type="number"
-              placeholder="DD"
-              onChange={handleChange}
-              max="31"
-            />
-          </InputAndTextDiv>
-          <InputAndTextDiv>
-            <Desc>Month</Desc>
-            <DateInput
-              $error={errors.month}
-              name="month"
-              type="number"
-              placeholder="MM"
-              onChange={handleChange}
-              max="12"
-            />
-          </InputAndTextDiv>
-          <InputAndTextDiv>
-            <Desc>Year</Desc>
-            <DateInput
-              $error={errors.year}
-              name="year"
-              type="number"
-              placeholder="YYYY"
-              onChange={handleChange}
-              max={dateOfTheMoment.getFullYear().toString()}
-            />
-          </InputAndTextDiv>
-          <SubmitButton type="submit">Submit</SubmitButton>
+      <Form onSubmit={handleSubmit}>
+        <InputAndTextDiv>
+          <Desc>Day</Desc>
+          <DateInput
+            $error={errors.day}
+            name="day"
+            type="number"
+            placeholder="DD"
+            onChange={handleChange}
+            max="31"
+          />
+        </InputAndTextDiv>
+        <InputAndTextDiv>
+          <Desc>Month</Desc>
+          <DateInput
+            $error={errors.month}
+            name="month"
+            type="number"
+            placeholder="MM"
+            onChange={handleChange}
+            max="12"
+          />
+        </InputAndTextDiv>
+        <InputAndTextDiv>
+          <Desc>Year</Desc>
+          <DateInput
+            $error={errors.year}
+            name="year"
+            type="number"
+            placeholder="YYYY"
+            onChange={handleChange}
+            max={dateOfTheMoment.getFullYear().toString()}
+          />
+        </InputAndTextDiv>
+        <SubmitButton type="submit">Submit</SubmitButton>
+        <TextWrap>
           <TextDiv>
             <H1 $primary>{result ? result.years : "--"}</H1>
             <H1>years</H1>
@@ -125,8 +128,8 @@ const App: React.FC = () => {
             <H1 $primary>{result ? result.days : "--"}</H1>
             <H1>days</H1>
           </TextDiv>
-        </Form>
-      </MainDiv>
+        </TextWrap>
+      </Form>
     </>
   );
 };
@@ -142,23 +145,35 @@ const SubmitButton = styled.button`
   right: 30px;
   height: 100px;
   width: 100px;
-  background-color: black;
+  color: white;
+  font-size: 1.4rem;
+  background-color: #854dff;
   border-radius: 50%;
   margin: 20px;
+  border: none;
+
+  @media only screen and (max-width: 918px) {
+    right: 2px;
+    top: 90px;
+    z-index: 1;
+  }
 `;
-const MainDiv = styled.div`
+const Form = styled.form`
   margin-top: 30px;
   position: relative;
   background-color: #ffffff;
   padding: 30px 100px;
   border-radius: 20px;
   border-bottom-right-radius: 20%;
+  @media only screen and (max-width: 918px) {
+    padding-bottom: 120px;
+  }
 `;
-const Form = styled.form``;
 const TextDiv = styled.div`
   display: flex;
   align-items: center;
   padding: 0;
+  min-width: 600px;
 `;
 const H1 = styled.h1<H1Props>`
   font-family: "Italic-bold";
@@ -168,6 +183,9 @@ const H1 = styled.h1<H1Props>`
   display: inline-block;
   font-size: ${(props) => (props.$primary ? "150px" : "100px")};
   margin: 0px;
+  @media only screen and (max-width: 918px) {
+    font-size: ${(props) => (props.$primary ? "100px" : "80px")};
+  }
 `;
 const Desc = styled.p`
   font-family: "Poppins-Extrabold";
@@ -187,8 +205,23 @@ const DateInput = styled.input<DateInputProps>`
   padding: 10px;
   width: 150px;
   font-size: 2rem;
-`;
 
+  &[type="number"]::-webkit-inner-spin-button,
+  &[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+    appearance: none;
+  }
+  @media only screen and (max-width: 918px) {
+    width: 100px;
+  }
+`;
+const TextWrap = styled.div``;
 const GlobalStyles = createGlobalStyle`
     @font-face {
         font-family: "Poppins-Extrabold" ;
